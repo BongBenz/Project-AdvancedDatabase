@@ -11,7 +11,7 @@ const app = express();
 app.use(bodyParser.urlencoded()); // x-www-form-urlencoded <form>
 // app.use(bodyParser.json()); // application/json
 
-const paymentData = require('./routes/saktree');
+const yggdrasilData = require('./routes/saktree');
 
 // fix error CORS
 app.use((req, res, next) => {
@@ -21,7 +21,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/payment", paymentData.routes);
+app.use("/yggdrasil", yggdrasilData.routes);
 
 mongoConnect(() => {
     app.listen(3001);

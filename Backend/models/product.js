@@ -1,10 +1,15 @@
 const mongodb = require('mongodb');
 const getDb = require('../util/database').getDb;
 
-class Products {
-    constructor(product_name, price, id) {
-        this.product_name = product_name;
+class Product {
+    constructor(description, image, name, price, stock, weigth, type, id) {
+        this.description = description;
+        this.image = image;
+        this.name = name;
         this.price = price;
+        this.stock = stock;
+        this.weigth = weigth;
+        this.type = type;
         this._id = id;
     }
 
@@ -14,11 +19,11 @@ class Products {
         if (this._id) {
             // Update the product
             dbOp = db
-                .collection('products')
+                .collection('product')
                 .updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
         } else {
             // Insert product
-            dbOp = db.collection('products').insertOne(this);
+            dbOp = db.collection('product').insertOne(this);
         }
         return dbOp
             .then(result => {
@@ -32,24 +37,9 @@ class Products {
     static fetchAll() {
         const db = getDb();
         return db
-            .collection('products')
+            .collection('product')
             .find()
             .toArray()
-            .then(products => {
-                console.log(products);
-                return products;
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }
-
-    static findById(prodId) {
-        const db = getDb();
-        return db
-            .collection('products')
-            .find({ _id: new mongodb.ObjectId(prodId) })
-            .next()
             .then(product => {
                 console.log(product);
                 return product;
@@ -59,10 +49,25 @@ class Products {
             });
     }
 
+    static findById(prodId) {
+        const db = getDb();
+        return db
+            .collection('product')
+            .find({ _id: new mongodb.ObjectId(prodId) })
+            .next()
+            .then(products => {
+                console.log(products);
+                return products;
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
     static deleteById(prodId) {
         const db = getDb();
         return db
-            .collection('products')
+            .collection('product')
             .deleteOne({ _id: new mongodb.ObjectId(prodId) })
             .then(result => {
                 console.log('Deleted');
@@ -73,4 +78,4 @@ class Products {
     }
 }
 
-module.exports = Products;
+module.exports = Product;

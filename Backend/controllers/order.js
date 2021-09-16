@@ -3,14 +3,24 @@ const { validationResult } = require('express-validator')
 const mongodb = require('mongodb');
 const Order = require('../models/order');
 const ObjectId = mongodb.ObjectId;
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
 
 exports.getSearchOrder = (req, res, next) => {
-    Order.fetchAll()
-        .then(orders => {
+    let search = req.query.search;
+    console.log(req)
+    let condition = {};
+    console.log(search);
+    // if(search!="undefined"){
+        // condition = {date_time: new RegExp(search)}+{receipt: new RegExp(search)};
+        // status ทำไมใช้ภาษาไทยไม่ได้ครับ
+        // price ค้นหา number ไม่ได้ครับ
+    //     condition = {$or: [{date_time: new RegExp(search)}, {receipt: new RegExp(search)}, {price: new RegExp(search)}, {status: new RegExp(search)}]};
+    // }
+    Order.fetchAll(condition)
+        .then(order => {
             res.status(200).json({
                 response: {
-                    data: orders,
+                    data: order,
                     message: "success"
                 }
             });
@@ -26,12 +36,12 @@ exports.getSearchOrder = (req, res, next) => {
 }
 
 exports.postAddOrder = (req, res, next) => {
-    console.log("lol");
     console.log(req.body);
-    const { date, users_id, product_id } = req.body;
+    const { date, users, product} = req.body;
     const errors = validationResult(req);
-    var u_id = mongoose.Types.ObjectId(users_id);
-    var v_id = mongoose.Types.ObjectId(product_id);
+    console.log(product[0].product_id);
+    // var u_id = mongoose.Types.ObjectId(users_id);
+    // var v_id = mongoose.Types.ObjectId(product_id);
     if (!errors.isEmpty()) {
         console.log("error");
         res.status(200).json({
@@ -41,8 +51,7 @@ exports.postAddOrder = (req, res, next) => {
             }
         });
     } else {
-        console.log("lol2");
-        const orders = new Order(date, u_id, v_id);
+        const orders = new Order(date, users, product);
         orders
             .save()
             .then(result => {
@@ -105,6 +114,7 @@ exports.postUpdateOrder = (req, res, next) => {
 };
 
 exports.getDeleteOrder = (req, res, next) => {
+    console.log("diawhdoi");
     const { order_id } = req.params;
     console.log(order_id);
     Order.deleteById(order_id)

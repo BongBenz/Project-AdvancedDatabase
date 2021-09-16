@@ -1,15 +1,9 @@
 const mongodb = require('mongodb');
 const getDb = require('../util/database').getDb;
 
-class UserAccount {
-    constructor(password, email, firstname, lastname, phone, address, cart, id) {
-        this.password = password;
-        this.email = email;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.phone = phone;
-        this.address = address;
-        this.cart = cart;
+class Producttype {
+    constructor(type, id) {
+        this.type = type;
         this._id = id;
     }
 
@@ -17,13 +11,13 @@ class UserAccount {
         const db = getDb();
         let dbOp;
         if (this._id) {
-            // Update the product
+            // Update the producttype
             dbOp = db
-                .collection('userAccount')
+                .collection('producttype')
                 .updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
         } else {
-            // Insert product
-            dbOp = db.collection('userAccount').insertOne(this);
+            // Insert producttype
+            dbOp = db.collection('producttype').insertOne(this);
         }
         return dbOp
             .then(result => {
@@ -37,12 +31,12 @@ class UserAccount {
     static fetchAll() {
         const db = getDb();
         return db
-            .collection('userAccount')
+            .collection('producttype')
             .find()
             .toArray()
-            .then(userAccount => {
-                console.log(userAccount);
-                return userAccount;
+            .then(producttype => {
+                console.log(producttype);
+                return producttype;
             })
             .catch(err => {
                 console.log(err);
@@ -52,12 +46,12 @@ class UserAccount {
     static findById(prodId) {
         const db = getDb();
         return db
-            .collection('userAccount')
+            .collection('producttype')
             .find({ _id: new mongodb.ObjectId(prodId) })
             .next()
-            .then(userAccounts => {
-                console.log(userAccounts);
-                return userAccounts;
+            .then(producttypes => {
+                console.log(producttypes);
+                return producttypes;
             })
             .catch(err => {
                 console.log(err);
@@ -67,7 +61,7 @@ class UserAccount {
     static deleteById(prodId) {
         const db = getDb();
         return db
-            .collection('userAccount')
+            .collection('producttype')
             .deleteOne({ _id: new mongodb.ObjectId(prodId) })
             .then(result => {
                 console.log('Deleted');
@@ -78,4 +72,4 @@ class UserAccount {
     }
 }
 
-module.exports = UserAccount;
+module.exports = Producttype;

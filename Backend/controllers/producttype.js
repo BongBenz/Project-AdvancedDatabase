@@ -1,15 +1,15 @@
 const { validationResult } = require('express-validator')
 
 const mongodb = require('mongodb');
-const Product = require('../models/products');
+const Producttype = require('../models/producttype');
 const ObjectId = mongodb.ObjectId;
 
-exports.getSearchProduct = (req, res, next) => {
-    Product.fetchAll()
-        .then(products => {
+exports.getSearchProductType = (req, res, next) => {
+    Producttype.fetchAll()
+        .then(producttypes => {
             res.status(200).json({
                 response: {
-                    data: products,
+                    data: producttypes,
                     message: "success"
                 }
             });
@@ -24,9 +24,9 @@ exports.getSearchProduct = (req, res, next) => {
         });
 }
 
-exports.postAddProduct = (req, res, next) => {
+exports.postAddProductType = (req, res, next) => {
     console.log(req.body);
-    const { product_name, price } = req.body;
+    const {  type } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         res.status(200).json({
@@ -36,12 +36,12 @@ exports.postAddProduct = (req, res, next) => {
             }
         });
     } else {
-        const product = new Product(product_name, price);
-        product
+        const producttypes = new Producttype( type);
+        producttypes
             .save()
             .then(result => {
                 // console.log(result);
-                console.log('Created Product');
+                console.log('Created Producttype');
                 res.status(200).json({
                     response: {
                         result: true,
@@ -61,9 +61,9 @@ exports.postAddProduct = (req, res, next) => {
     }
 };
 
-exports.postUpdateProduct = (req, res, next) => {
+exports.postUpdateProducttype = (req, res, next) => {
     console.log(req.body);
-    const { product_id, product_name, price } = req.body;
+    const { producttype_id, type } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         res.status(200).json({
@@ -73,11 +73,11 @@ exports.postUpdateProduct = (req, res, next) => {
             }
         });
     } else {
-        const product = new Product(product_name, price, new ObjectId(product_id));
-        product
+        const producttypes = new Producttype( type, new ObjectId(producttype_id));
+        producttypes
             .save()
             .then(result => {
-                console.log('Update Product');
+                console.log('Update Producttype');
                 res.status(200).json({
                     response: {
                         result: true,
@@ -97,12 +97,12 @@ exports.postUpdateProduct = (req, res, next) => {
     }
 };
 
-exports.getDeleteProduct = (req, res, next) => {
-    const { product_id } = req.params;
-    console.log(product_id);
-    Product.deleteById(product_id)
+exports.getDeleteProducttype = (req, res, next) => {
+    const { producttype_id } = req.params;
+    console.log(producttype_id);
+    Producttype.deleteById(producttype_id)
         .then(() => {
-            console.log('Delete Product');
+            console.log('Delete Producttype');
             res.status(200).json({
                 response: {
                     result: true,
@@ -120,18 +120,17 @@ exports.getDeleteProduct = (req, res, next) => {
         });
 };
 
-exports.getUpdateProduct = (req, res, next) => {
+exports.getUpdateProducttype = (req, res, next) => {
     console.log(req.params);
-    const { product_id } = req.params;
-    let product_name = '';
-    let price = '';
+    const { producttype_id } = req.params;
+    let type = '';
 
-    Product.findById(product_id)
-        .then(product => {
-            console.log(product);
+    Producttype.findById(producttype_id)
+        .then(producttype => {
+            console.log(producttype);
             res.status(200).json({
                 response: {
-                    data: product,
+                    data: producttype,
                     message: "success"
                 }
             });

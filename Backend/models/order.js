@@ -2,10 +2,10 @@ const mongodb = require('mongodb');
 const getDb = require('../util/database').getDb;
 
 class Order {
-    constructor(date, users_id, product_id, id) {
+    constructor(date, users, product, id) {
         this.date = date;
-        this.users_id = users_id;
-        this.product_id = product_id;
+        this.users = users;
+        this.product = product;
         this._id = id;
     }
 

@@ -19,11 +19,11 @@ class UserAccount {
         if (this._id) {
             // Update the product
             dbOp = db
-                .collection('userAccount')
+                .collection('useraccount')
                 .updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
         } else {
             // Insert product
-            dbOp = db.collection('userAccount').insertOne(this);
+            dbOp = db.collection('useraccount').insertOne(this);
         }
         return dbOp
             .then(result => {
@@ -37,12 +37,12 @@ class UserAccount {
     static fetchAll() {
         const db = getDb();
         return db
-            .collection('userAccount')
+            .collection('useraccount')
             .find()
             .toArray()
-            .then(userAccount => {
-                console.log(userAccount);
-                return userAccount;
+            .then(useraccount => {
+                console.log(useraccount);
+                return useraccount;
             })
             .catch(err => {
                 console.log(err);
@@ -52,12 +52,12 @@ class UserAccount {
     static findById(prodId) {
         const db = getDb();
         return db
-            .collection('userAccount')
+            .collection('useraccount')
             .find({ _id: new mongodb.ObjectId(prodId) })
             .next()
-            .then(userAccounts => {
-                console.log(userAccounts);
-                return userAccounts;
+            .then(useraccounts => {
+                console.log(useraccounts);
+                return useraccounts;
             })
             .catch(err => {
                 console.log(err);
@@ -67,7 +67,7 @@ class UserAccount {
     static deleteById(prodId) {
         const db = getDb();
         return db
-            .collection('userAccount')
+            .collection('useraccount')
             .deleteOne({ _id: new mongodb.ObjectId(prodId) })
             .then(result => {
                 console.log('Deleted');

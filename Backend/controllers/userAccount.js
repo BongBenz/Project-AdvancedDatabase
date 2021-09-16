@@ -1,15 +1,15 @@
 const { validationResult } = require('express-validator')
 
 const mongodb = require('mongodb');
-const UserAccount = require('../models/userAccount');
+const UserAccount = require('../models/useraccount');
 const ObjectId = mongodb.ObjectId;
 
 exports.getSearchUserAccount = (req, res, next) => {
     UserAccount.fetchAll()
-        .then(userAccount => {
+        .then(useraccount => {
             res.status(200).json({
                 response: {
-                    data: userAccount,
+                    data: useraccount,
                     message: "success"
                 }
             });
@@ -132,11 +132,11 @@ exports.getUpdateUserAccount = (req, res, next) => {
     let cart = '';
 
     UserAccount.findById(userAccount_id)
-        .then(userAccount => {
-            console.log(userAccount);
+        .then(useraccount => {
+            console.log(useraccount);
             res.status(200).json({
                 response: {
-                    data: userAccount,
+                    data: useraccount,
                     message: "success"
                 }
             });
@@ -144,7 +144,7 @@ exports.getUpdateUserAccount = (req, res, next) => {
         .catch(err => {
             res.status(200).json({
                 response: {
-                    data: [],
+                    data: useraccount,
                     message: err
                 }
             });
